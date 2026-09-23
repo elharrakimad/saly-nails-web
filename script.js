@@ -561,6 +561,92 @@ function handleSwipe() {
 }
 
 
+
+
+/* =========================================================
+   GOOGLE ANALYTICS — ÉVÉNEMENTS
+========================================================= */
+
+function trackEvent(eventName, parameters = {}) {
+
+    if (typeof gtag === "function") {
+
+        gtag("event", eventName, parameters);
+
+    }
+
+}
+
+
+/* ---------- CLICS CONTACT ---------- */
+
+document.querySelectorAll('a[href*="instagram.com"]').forEach(function (link) {
+
+    link.addEventListener("click", function () {
+
+        trackEvent("instagram_click", {
+            link_url: link.href
+        });
+
+    });
+
+});
+
+
+document.querySelectorAll('a[href*="wa.me"]').forEach(function (link) {
+
+    link.addEventListener("click", function () {
+
+        trackEvent("whatsapp_click", {
+            link_url: link.href
+        });
+
+    });
+
+});
+
+
+document.querySelectorAll('a[href^="mailto:"]').forEach(function (link) {
+
+    link.addEventListener("click", function () {
+
+        trackEvent("email_click", {
+            link_url: link.href
+        });
+
+    });
+
+});
+
+
+/* ---------- CLICS RENDEZ-VOUS ---------- */
+
+document.querySelectorAll('a[href="#reservation"]').forEach(function (link) {
+
+    link.addEventListener("click", function () {
+
+        trackEvent("reservation_cta_click");
+
+    });
+
+});
+
+
+/* ---------- OUVERTURE GALERIE ---------- */
+
+galleryItems.forEach(function (item) {
+
+    item.addEventListener("click", function () {
+
+        trackEvent("gallery_open", {
+            image_index: Number(item.dataset.index) + 1
+        });
+
+    });
+
+});
+
+
 /* =========================================================
    RÉSERVATION → WHATSAPP
 ========================================================= */
@@ -665,6 +751,14 @@ Merci ✨`;
                 encodeURIComponent(
                     whatsappMessage
                 );
+
+
+            /* ---------- ANALYTICS : DEMANDE DE RÉSERVATION ---------- */
+
+            trackEvent("reservation_request", {
+                service: service,
+                has_message: message.length > 0
+            });
 
 
             /* =========================================
